@@ -2,17 +2,10 @@ import Link from "next/link";
 import styles from "./EventItem.module.css";
 import CalendarMonth from "@mui/icons-material/CalendarMonth";
 import PlaceIcon from "@mui/icons-material/Place";
+import { Event } from "../../types/types";
 
 type EventItemProps = {
-  event: {
-    id: string;
-    title: string;
-    description: string;
-    location: string;
-    date: string;
-    image: string;
-    isFeatured: boolean;
-  };
+  event: Event;
 };
 
 function EventItem({ event }: EventItemProps) {

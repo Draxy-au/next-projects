@@ -1,41 +1,21 @@
+import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import EventList from "../../components/events/EventList";
-import { getAllEvents } from "../../dummy-data";
+import { Event } from "../../types/types";
 
-function FilterEventsPage() {
-  const router = useRouter();
+type FilterEventsPageProps = {
+  filteredEvents: Event[];
+};
 
-  const allEvents = getAllEvents();
-
-  const [eventList, setEventList] = useState(allEvents);
-  const [month, setMonth] = useState(0);
-  const [year, setYear] = useState(0);
+function FilterEventsPage({ filteredEvents }: FilterEventsPageProps) {
+  const [eventList, setEventList] = useState(filteredEvents);
 
   useEffect(() => {
-    if (router.query.slug && router.query.slug[0] && router.query.slug[1]) {
-      const slugYear = router.query.slug[0];
-      const slugMonth = router.query.slug[1];
-      setYear(+slugYear);
-      setMonth(+slugMonth);
+    if (filteredEvents) {
+      setEventList(filteredEvents);
     }
-
-    const newEventList = allEvents.filter((event) => {
-      const eMonth = new Date(event.date).getMonth() + 1;
-      const eYear = new Date(event.date).getFullYear();
-
-      console.log(month);
-      console.log(year);
-      console.log(eMonth);
-      console.log(eYear);
-      if (eMonth == month && eYear == year) {
-        return true;
-      }
-    });
-    console.log(newEventList);
-    setEventList(newEventList);
-  }, [router.query.slug, year, month]);
+  }, [filteredEvents]);
 
   return (
     <div style={{ padding: "0px 20px" }}>
@@ -65,5 +45,58 @@ function FilterEventsPage() {
     </div>
   );
 }
+
+async function getAllEventData() {
+  const response = await fetch(
+    `https://nextjs-draxy-default-rtdb.firebaseio.com/eventsdb/events.json`
+  );
+
+  const data = await response.json();
+
+  const events = [];
+
+  for (const key in data) {
+    events.push({
+      id: key,
+      ...data[key],
+    });
+  }
+
+  return events;
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { params } = context;
+
+  if (!params) {
+    return { props: {} };
+  }
+
+  const filteredParams = params.slug;
+
+  if (!filteredParams) {
+    return { props: {} };
+  }
+
+  const slugYear = +filteredParams[0] || 0;
+  const slugMonth = +filteredParams[1] || 0;
+
+  const allEvents = await getAllEventData();
+
+  const newEventList = allEvents.filter((event) => {
+    const eMonth = new Date(event.date).getMonth() + 1;
+    const eYear = new Date(event.date).getFullYear();
+
+    if (eMonth == slugMonth && eYear == slugYear) {
+      return true;
+    }
+  });
+
+  return {
+    props: {
+      filteredEvents: newEventList,
+    },
+  };
+};
 
 export default FilterEventsPage;

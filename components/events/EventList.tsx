@@ -1,16 +1,9 @@
+import { Event } from "../../types/types";
 import EventItem from "./EventItem";
 import styles from "./EventList.module.css";
 
 type EventListProps = {
-  events: {
-    id: string;
-    title: string;
-    description: string;
-    location: string;
-    date: string;
-    image: string;
-    isFeatured: boolean;
-  }[];
+  events: Event[];
 };
 
 function EventList({ events }: EventListProps) {

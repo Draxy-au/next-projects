@@ -1,10 +1,14 @@
+import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import EventList from "../../components/events/EventList";
-import { getAllEvents } from "../../dummy-data";
+import type { Event } from "../../types/types";
 
-function EventsPage() {
-  const allEvents = getAllEvents();
+type EventsPageProps = {
+  allEvents: Event[];
+};
+
+function EventsPage({ allEvents }: EventsPageProps) {
   const router = useRouter();
 
   const [month, setMonth] = useState("1");
@@ -78,6 +82,29 @@ function EventsPage() {
       <EventList events={eventList} />
     </div>
   );
+}
+
+export async function getStaticProps(context: NextPageContext) {
+  const response = await fetch(
+    "https://nextjs-draxy-default-rtdb.firebaseio.com/eventsdb/events.json"
+  );
+  const data = await response.json();
+
+  const events = [];
+
+  for (const key in data) {
+    events.push({
+      id: key,
+      ...data[key],
+    });
+  }
+
+  return {
+    props: {
+      allEvents: events,
+    },
+    revalidate: 1800,
+  };
 }
 
 export default EventsPage;

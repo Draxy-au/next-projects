@@ -22,7 +22,6 @@ function MainHeader() {
           <Link href='/events'>ALL EVENTS</Link>
         </span>
         <Link href='/'>FEATURED EVENTS</Link>
-        <span>ITEM 3</span>
       </nav>
     </header>
   );
