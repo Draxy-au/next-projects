@@ -3,6 +3,7 @@ import styles from "./EventItem.module.css";
 import CalendarMonth from "@mui/icons-material/CalendarMonth";
 import PlaceIcon from "@mui/icons-material/Place";
 import { Event } from "../../types/types";
+import Image from "next/image";
 
 type EventItemProps = {
   event: Event;
@@ -15,7 +16,12 @@ function EventItem({ event }: EventItemProps) {
       style={{ listStyleType: "none" }}
       className={styles.lineItem}
     >
-      <img src={`../../${event.image}`} alt='' height='640px' width='480px' />
+      <Image
+        src={`/${event.image}`}
+        alt={event.title}
+        height={640}
+        width={480}
+      />
       <div className={styles.eventInfo}>
         <h2>{event.title}</h2>
         <div>
