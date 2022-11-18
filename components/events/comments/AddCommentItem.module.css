@@ -1,0 +1,41 @@
+.addCommentForm {
+  display: flex;
+  flex-direction: column;
+  width: 640px;
+  gap: 10px;
+}
+
+.addCommentHeader {
+  font-size: large;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.title {
+  padding: 10px;
+  font-weight: bold;
+}
+
+.date {
+  padding: 10px;
+  font-weight: bold;
+  width: fit-content;
+}
+
+.comment {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+  font-weight: bold;
+  word-wrap: break-word;
+  resize: none;
+  height: 80px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-weight: bold;
+  width: fit-content;
+  background-color: blueviolet;
+}
