@@ -1,4 +1,11 @@
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
+import NotificationContext from "../../../contexts/notification-context";
 import styles from "./AddCommentItem.module.css";
 
 type AddCommentItemProps = {
@@ -10,8 +17,11 @@ function AddCommentItem({ eventId, updateCommentList }: AddCommentItemProps) {
   const [title, setTitle] = useState("");
   const [commentText, setCommentText] = useState("");
 
+  const { showNotification } = useContext(NotificationContext);
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+    showNotification("PENDING", "ADDING COMMENT", "Adding new comment.", 5000);
 
     const content = {
       title: title,
@@ -44,6 +54,13 @@ function AddCommentItem({ eventId, updateCommentList }: AddCommentItemProps) {
 
     setTitle("");
     setCommentText("");
+
+    showNotification(
+      "SUCCESS",
+      "COMMENT ADDED",
+      "Comment added successfully.",
+      5000
+    );
 
     console.log("response: ", await response.json());
   }

@@ -1,11 +1,20 @@
-import { FormEvent, Ref, useRef } from "react";
+import { FormEvent, Ref, useContext, useRef } from "react";
+import NotificationContext from "../../contexts/notification-context";
 import styles from "./NewsletterSignup.module.css";
 
 function NewsletterSignup() {
   const emailInputRef = useRef<HTMLInputElement>(null);
+  const { showNotification } = useContext(NotificationContext);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+
+    showNotification(
+      "PENDING",
+      "ADDING EMAIL",
+      "Adding the email address to the Newsletter Mailing List.",
+      5000
+    );
 
     if (!emailInputRef.current || !emailInputRef.current.value) {
       return;
@@ -21,6 +30,12 @@ function NewsletterSignup() {
     });
 
     console.log("Response: ", await response.json());
+    showNotification(
+      "SUCCESS",
+      "EMAIL ADDED",
+      "Email address addedto the Newsletter Mailing List.",
+      5000
+    );
     emailInputRef.current.value = "";
   }
 

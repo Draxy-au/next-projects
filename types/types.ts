@@ -15,3 +15,9 @@ export type Comment = {
   text: string;
   date: string;
 }
+
+export type Notification = {
+  title: string;
+  status: string;
+  text: string;
+}
